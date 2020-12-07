@@ -1,0 +1,15 @@
+[package]
+name = "nxn-store"
+version = "0.1.0"
+authors = ["4meta5 <asinghchrony@protonmail.com>"]
+edition = "2018"
+description = "password authenticated storage"
+
+[dependencies]
+anyhow = "1.0.35"
+async-std = "1.7.0"
+bip39 = "1.0.0-rc1"
+crypto = {package = "nxn-crypto",path = "../crypto"}
+secrecy = "0.7.0"
+thiserror = "1.0.22"
+zeroize = "1.1"
