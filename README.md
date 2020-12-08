@@ -21,7 +21,7 @@ OPTIONS:
 You can set the length of the generated password and pass the `-s` flag if the password can only be comprised of letters and numbers (no symbols). This is a dumb requirement, but I've seen it enough to add the flag.
 
 Example queries:
-```bash
+```
 % ./nxn-cli -l=10 -s
 Password Generated: c3Lqf2b58n
 % ./nxn-cli -l=20 -s
