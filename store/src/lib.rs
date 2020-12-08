@@ -18,14 +18,14 @@ use gen::score;
 
 /// Password authenticated store
 pub struct Store {
-    path: PathBuf,
+    _path: PathBuf,
     password: Option<SecretString>,
 }
 
 impl Store {
     pub fn new<T: AsRef<Path>>(path: T) -> Self {
         Self {
-            path: path.as_ref().to_path_buf(),
+            _path: path.as_ref().to_path_buf(),
             password: None,
         }
     }

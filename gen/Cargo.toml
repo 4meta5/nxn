@@ -6,3 +6,4 @@ edition = "2018"
 description = "password generation utils"
 
 [dependencies]
+rand = "0.7.3"

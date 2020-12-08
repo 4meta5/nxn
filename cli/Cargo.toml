@@ -5,3 +5,4 @@ authors = ["4meta5 <asinghchrony@protonmail.com>"]
 edition = "2018"
 
 [dependencies]
+gen = {package = "nxn-gen",path = "../gen"}
