@@ -73,7 +73,7 @@ impl Generator {
             ret.push(s);
         }
         shuffle(&ret)
-    } // consider writing std_no_space and/or
+    } // consider writing std_no_space
 }
 
 /// Password Strength Score
@@ -228,6 +228,13 @@ mod tests {
     use super::*;
     #[test]
     fn passgen_behaves() {
+        // 4 fails because not enough entropy
+        let cx = Generator::simple(5usize);
+        assert!(cx.len() == 5usize);
+        assert!(score(cx) == 10);
+        let dx = Generator::std(5usize);
+        assert!(dx.len() == 5usize);
+        assert!(score(dx) == 10);
         let ax = Generator::simple(53usize);
         assert!(ax.len() == 53usize);
         assert!(score(ax) == 30);
