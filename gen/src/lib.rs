@@ -1,8 +1,11 @@
 //! Password Generation Utilities
+mod gen;
+use gen::Generator;
 
 /// Password Strength Score
 /// >output ranges from 0-50
-/// 0  - matches or contains common passwords
+/// 0  - matches/contains common passwords
+/// 5  - length < 5 characters
 /// 10 - length < 9 characters
 /// 20 - does not contain lowercase, uppercase or number
 /// 30 - does not contain symbol
@@ -13,7 +16,11 @@ pub fn score(s: String) -> u8 {
     if common_password(&s) {
         return score
     }
-    score += 10u8;
+    score += 5u8;
+    if s.len() <= 4usize {
+        return score
+    }
+    score += 5u8;
     let f: Frequency = s.into();
     let d: Distribution = f.into();
     if d.all.total <= 8usize {
@@ -211,6 +218,8 @@ mod tests {
     fn score_check() {
         let a = score("chbwsukberi2bv2eivbwwbviobvbwvb2chbuvowecu2u2bf2buekvcbewuvpasswordvwehgkcjgf2ivwijkwh cwvkvwgjkwfw".to_string());
         assert!(a == 0u8);
+        let a0 = score("wxyz".to_string());
+        assert!(a0 == 5u8);
         let b = score("chbwsukb".to_string());
         assert!(b == 10u8);
         let c = score("chbwsukberi2bv2eivbwwbviobvbwvb2chbuvowecu2u2bf2buekvcbewuvwehgkcjgf2ivwijkwh cwvkvwgjkwfw".to_string());
