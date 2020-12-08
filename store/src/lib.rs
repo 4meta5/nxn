@@ -8,7 +8,6 @@ use secrecy::{
     SecretString,
 };
 mod err;
-mod gen;
 use err::{
     IncorrectPassword,
     PasswordNotSet,
@@ -19,14 +18,14 @@ use gen::score;
 
 /// Password authenticated store
 pub struct Store {
-    path: PathBuf,
+    _path: PathBuf,
     password: Option<SecretString>,
 }
 
 impl Store {
     pub fn new<T: AsRef<Path>>(path: T) -> Self {
         Self {
-            path: path.as_ref().to_path_buf(),
+            _path: path.as_ref().to_path_buf(),
             password: None,
         }
     }
@@ -34,7 +33,7 @@ impl Store {
         if self.has_password() {
             Err(PasswordSet.into())
         } else {
-            if score(password.expose_secret().to_string()) == 0u8 {
+            if score(password.expose_secret().to_string()) < 10u8 {
                 return Err(PasswordTooSimple.into())
             }
             self.password = Some(password);
@@ -51,7 +50,7 @@ impl Store {
     ) -> Result<()> {
         if let Some(p) = &self.password {
             if p.expose_secret() == old.expose_secret() {
-                if score(new.expose_secret().to_string()) == 0u8 {
+                if score(new.expose_secret().to_string()) < 10u8 {
                     return Err(PasswordTooSimple.into())
                 }
                 self.password = Some(new);
@@ -69,11 +68,11 @@ impl Store {
 fn password_behaves() {
     let mut s = Store::new("example");
     // 1 -- Storage Initialized
-    let p1 = SecretString::new("pword".to_string());
+    let p1 = SecretString::new("examplecode".to_string());
     let a = s.set_password(p1.clone());
     // 2 -- Password Set for Storage
     assert!(a.is_ok());
-    let p2 = SecretString::new("pword2".to_string());
+    let p2 = SecretString::new("examplezcode".to_string());
     let b = s.set_password(p2.clone());
     // 3 -- Password was not Set because Already Set
     assert!(b.is_err());
@@ -83,8 +82,10 @@ fn password_behaves() {
     let d = s.change_password(p1.clone(), p1);
     // 5 -- Password Change Failed Because Old Was Incorrect
     assert!(d.is_err());
-    let e =
-        s.change_password(p2.clone(), SecretString::new("pword3".to_string()));
+    let e = s.change_password(
+        p2.clone(),
+        SecretString::new("examplexcode".to_string()),
+    );
     // 6 -- Password Change Succeeded Because Old Was Correct
     assert!(e.is_ok());
 }

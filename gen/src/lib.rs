@@ -1,8 +1,85 @@
 //! Password Generation Utilities
+use rand::{
+    seq::SliceRandom,
+    thread_rng,
+    Rng,
+};
+
+fn shuffle(s: &str) -> String {
+    let mut rng = rand::thread_rng();
+    let mut bytes = s.to_string().into_bytes();
+    bytes.shuffle(&mut rng);
+    String::from_utf8(bytes).unwrap()
+}
+
+pub struct Generator;
+
+impl Generator {
+    pub fn simple(len: usize) -> String {
+        let mut rng = thread_rng();
+        let mut space_left = len;
+        let lower = rng.gen_range(1, len - 3);
+        space_left -= lower;
+        let upper = rng.gen_range(1, space_left - 2);
+        space_left -= upper;
+        let number = space_left;
+        let mut ret = String::new();
+        for _ in 0..lower {
+            let u = A::LOWER.as_bytes()[rng.gen_range(1, A::LOWER.len())];
+            let v = u as char;
+            ret.push(v);
+        }
+        for _ in 0..upper {
+            let w = A::UPPER.as_bytes()[rng.gen_range(1, A::UPPER.len())];
+            let x = w as char;
+            ret.push(x);
+        }
+        for _ in 0..number {
+            let y = A::NUMBERS.as_bytes()[rng.gen_range(1, A::NUMBERS.len())];
+            let z = y as char;
+            ret.push(z);
+        }
+        shuffle(&ret)
+    }
+    pub fn std(len: usize) -> String {
+        let mut rng = thread_rng();
+        let mut space_left = len;
+        let lower = rng.gen_range(1, len - 3);
+        space_left -= lower;
+        let upper = rng.gen_range(1, space_left - 2);
+        space_left -= upper;
+        let number = rng.gen_range(1, space_left - 1);
+        space_left -= number;
+        let symbol = space_left;
+        let mut ret = String::new();
+        for _ in 0..lower {
+            let u = A::LOWER.as_bytes()[rng.gen_range(1, A::LOWER.len())];
+            let v = u as char;
+            ret.push(v);
+        }
+        for _ in 0..upper {
+            let w = A::UPPER.as_bytes()[rng.gen_range(1, A::UPPER.len())];
+            let x = w as char;
+            ret.push(x);
+        }
+        for _ in 0..number {
+            let y = A::NUMBERS.as_bytes()[rng.gen_range(1, A::NUMBERS.len())];
+            let z = y as char;
+            ret.push(z);
+        }
+        for _ in 0..symbol {
+            let r = A::SYMBOLS.as_bytes()[rng.gen_range(1, A::SYMBOLS.len())];
+            let s = r as char;
+            ret.push(s);
+        }
+        shuffle(&ret)
+    } // consider writing std_no_space
+}
 
 /// Password Strength Score
 /// >output ranges from 0-50
-/// 0  - matches or contains common passwords
+/// 0  - matches/contains common passwords
+/// 5  - length < 5 characters
 /// 10 - length < 9 characters
 /// 20 - does not contain lowercase, uppercase or number
 /// 30 - does not contain symbol
@@ -13,7 +90,11 @@ pub fn score(s: String) -> u8 {
     if common_password(&s) {
         return score
     }
-    score += 10u8;
+    score += 5u8;
+    if s.len() <= 4usize {
+        return score
+    }
+    score += 5u8;
     let f: Frequency = s.into();
     let d: Distribution = f.into();
     if d.all.total <= 8usize {
@@ -146,6 +227,49 @@ pub fn common_password(s: &str) -> bool {
 mod tests {
     use super::*;
     #[test]
+    fn passgen_behaves() {
+        // 4 fails because not enough entropy
+        let cx = Generator::simple(5usize);
+        assert!(cx.len() == 5usize);
+        assert!(score(cx) == 10);
+        let dx = Generator::std(5usize);
+        assert!(dx.len() == 5usize);
+        assert!(score(dx) == 10);
+        let ax = Generator::simple(53usize);
+        assert!(ax.len() == 53usize);
+        assert!(score(ax) == 30);
+        let bx = Generator::std(96usize);
+        assert!(bx.len() == 96usize);
+        assert!(score(bx) == 50);
+    }
+    #[test]
+    fn lossless_shuffle() {
+        let xa = "abcdefghijklmnopqrstuvwxyz";
+        let xb = shuffle(xa);
+        for xc in xa.chars() {
+            assert!(xb.contains(xc));
+        }
+        assert!(xb.len() == xa.len());
+        let xd = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        let xe = shuffle(xd);
+        for xf in xd.chars() {
+            assert!(xe.contains(xf));
+        }
+        assert!(xd.len() == xe.len());
+        let xg = "0123456789";
+        let xh = shuffle(xg);
+        for xi in xg.chars() {
+            assert!(xh.contains(xi));
+        }
+        assert!(xg.len() == xh.len());
+        let xj = " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+        let xk = shuffle(xj);
+        for xl in xj.chars() {
+            assert!(xk.contains(xl));
+        }
+        assert!(xj.len() == xk.len());
+    }
+    #[test]
     fn contains_literal_password() {
         let a = common_password("chbwsukberi2bv2eivbwwbviobvbwvb2chbuvowecu2u2bf2buekvcbewuvpasswordvwehgkcjgf2ivwijkwhcwvkvwgjkwfw");
         assert!(a);
@@ -211,6 +335,8 @@ mod tests {
     fn score_check() {
         let a = score("chbwsukberi2bv2eivbwwbviobvbwvb2chbuvowecu2u2bf2buekvcbewuvpasswordvwehgkcjgf2ivwijkwh cwvkvwgjkwfw".to_string());
         assert!(a == 0u8);
+        let a0 = score("wxyz".to_string());
+        assert!(a0 == 5u8);
         let b = score("chbwsukb".to_string());
         assert!(b == 10u8);
         let c = score("chbwsukberi2bv2eivbwwbviobvbwvb2chbuvowecu2u2bf2buekvcbewuvwehgkcjgf2ivwijkwh cwvkvwgjkwfw".to_string());
