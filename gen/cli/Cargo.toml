@@ -5,5 +5,5 @@ authors = ["4meta5 <asinghchrony@protonmail.com>"]
 edition = "2018"
 
 [dependencies]
-gen = {package = "nxn-gen",path = "../gen"}
+gen = {package = "nxn-gen",path = "../"}
 structopt = "0.3.21"
