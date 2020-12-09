@@ -24,7 +24,6 @@ fn main() {
         } else {
             Generator::std(opt.len)
         };
-        // TODO: add password strength
         let score = score(pass.clone());
         println!(
             "Password Generated: {}\n Password Strength: {}",
