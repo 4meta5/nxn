@@ -69,23 +69,21 @@ fn password_behaves() {
     let mut s = Store::new("example");
     // 1 -- Storage Initialized
     let p1 = SecretString::new("examplecode".to_string());
-    let a = s.set_password(p1.clone());
+    let xa = s.set_password(p1.clone());
     // 2 -- Password Set for Storage
-    assert!(a.is_ok());
+    assert!(xa.is_ok());
     let p2 = SecretString::new("examplezcode".to_string());
-    let b = s.set_password(p2.clone());
+    let xb = s.set_password(p2.clone());
     // 3 -- Password was not Set because Already Set
-    assert!(b.is_err());
-    let c = s.change_password(p1.clone(), p2.clone());
+    assert!(xb.is_err());
+    let xc = s.change_password(p1.clone(), p2.clone());
     // 4 -- Password was Changed Because Old was Correct
-    assert!(c.is_ok());
-    let d = s.change_password(p1.clone(), p1);
+    assert!(xc.is_ok());
+    let xd = s.change_password(p1.clone(), p1);
     // 5 -- Password Change Failed Because Old Was Incorrect
-    assert!(d.is_err());
-    let e = s.change_password(
-        p2.clone(),
-        SecretString::new("examplexcode".to_string()),
-    );
+    assert!(xd.is_err());
+    let xe =
+        s.change_password(p2, SecretString::new("examplexcode".to_string()));
     // 6 -- Password Change Succeeded Because Old Was Correct
-    assert!(e.is_ok());
+    assert!(xe.is_ok());
 }

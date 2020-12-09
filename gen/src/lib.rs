@@ -271,24 +271,24 @@ mod tests {
     }
     #[test]
     fn contains_literal_password() {
-        let a = common_password("chbwsukberi2bv2eivbwwbviobvbwvb2chbuvowecu2u2bf2buekvcbewuvpasswordvwehgkcjgf2ivwijkwhcwvkvwgjkwfw");
-        assert!(a);
-        let b = common_password("chbwsukberi2bv2eivbwwbviobvbwvb2chbuvowecu2u2bf2buekvcbewuvwehgkcjgf2ivwijkwhcwvkvwgjkwfw");
-        assert!(!b);
+        let xa = common_password("chbwsukberi2bv2eivbwwbviobvbwvb2chbuvowecu2u2bf2buekvcbewuvpasswordvwehgkcjgf2ivwijkwhcwvkvwgjkwfw");
+        assert!(xa);
+        let xb = common_password("chbwsukberi2bv2eivbwwbviobvbwvb2chbuvowecu2u2bf2buekvcbewuvwehgkcjgf2ivwijkwhcwvkvwgjkwfw");
+        assert!(!xb);
     }
     #[test]
     fn freq_check() {
         // TODO: convert to prop-tests
-        let s = String::from("abcabc");
-        let f: Frequency = s.into();
-        let d: Distribution = f.into();
-        assert!(d.all.total == d.lower.total);
-        assert!(d.all.uneeq == d.lower.uneeq);
-        assert!(d.all.total == 6usize);
-        assert!(d.all.uneeq == 3usize);
-        assert!(d.upper.total == 0usize);
-        assert!(d.number.total == 0usize);
-        assert!(d.symbol.total == 0usize);
+        let xs = String::from("abcabc");
+        let xf: Frequency = xs.into();
+        let xd: Distribution = xf.into();
+        assert!(xd.all.total == xd.lower.total);
+        assert!(xd.all.uneeq == xd.lower.uneeq);
+        assert!(xd.all.total == 6usize);
+        assert!(xd.all.uneeq == 3usize);
+        assert!(xd.upper.total == 0usize);
+        assert!(xd.number.total == 0usize);
+        assert!(xd.symbol.total == 0usize);
         let s2 = String::from("abc123");
         let f2: Frequency = s2.into();
         let d2: Distribution = f2.into();
@@ -333,22 +333,22 @@ mod tests {
     }
     #[test]
     fn score_check() {
-        let a = score("chbwsukberi2bv2eivbwwbviobvbwvb2chbuvowecu2u2bf2buekvcbewuvpasswordvwehgkcjgf2ivwijkwh cwvkvwgjkwfw".to_string());
-        assert!(a == 0u8);
+        let xa = score("chbwsukberi2bv2eivbwwbviobvbwvb2chbuvowecu2u2bf2buekvcbewuvpasswordvwehgkcjgf2ivwijkwh cwvkvwgjkwfw".to_string());
+        assert!(xa == 0u8);
         let a0 = score("wxyz".to_string());
         assert!(a0 == 5u8);
-        let b = score("chbwsukb".to_string());
-        assert!(b == 10u8);
-        let c = score("chbwsukberi2bv2eivbwwbviobvbwvb2chbuvowecu2u2bf2buekvcbewuvwehgkcjgf2ivwijkwh cwvkvwgjkwfw".to_string());
-        assert!(c == 20u8);
-        let d = score("chbwsukber2bV3884shdhhjdshjdbjcjhDGGDGD".to_string());
-        assert!(d == 30u8);
-        let e = score("chbwsukber2bV$".to_string());
-        assert!(e == 40u8);
-        let f = score("chbwsukber2bV$s".to_string());
-        assert!(f == 50u8);
+        let xb = score("chbwsukb".to_string());
+        assert!(xb == 10u8);
+        let xc = score("chbwsukberi2bv2eivbwwbviobvbwvb2chbuvowecu2u2bf2buekvcbewuvwehgkcjgf2ivwijkwh cwvkvwgjkwfw".to_string());
+        assert!(xc == 20u8);
+        let xd = score("chbwsukber2bV3884shdhhjdshjdbjcjhDGGDGD".to_string());
+        assert!(xd == 30u8);
+        let xe = score("chbwsukber2bV$".to_string());
+        assert!(xe == 40u8);
+        let xf = score("chbwsukber2bV$s".to_string());
+        assert!(xf == 50u8);
         // this is an example of a bad password with the highest rating (points to limitations of the score function)
-        let g = score("ssssssssss5sS$s".to_string());
-        assert!(g == 50u8);
+        let xg = score("ssssssssss5sS$s".to_string());
+        assert!(xg == 50u8);
     }
 }
