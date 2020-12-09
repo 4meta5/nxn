@@ -1,5 +1,5 @@
 [package]
-name = "nxn-cli"
+name = "nxn-gen-cli"
 version = "0.1.0"
 authors = ["4meta5 <asinghchrony@protonmail.com>"]
 edition = "2018"
