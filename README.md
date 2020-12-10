@@ -12,11 +12,11 @@ password manager components
 password generation cli (`./gen/cli`)
 
 ```
-% ./nxn-gen-cli -h        
-nxn-gen-cli 0.1.0
+% ./nxn-gen -h        
+nxn-gen 0.1.0
 
 USAGE:
-    nxn-gen-cli [FLAGS] [OPTIONS]
+    nxn-gen [FLAGS] [OPTIONS]
 
 FLAGS:
     -h, --help       Prints help information
@@ -31,13 +31,13 @@ OPTIONS:
 You can set the length, quantity, and complexity of the generated password. The default is for the tool to generate one password of length 20 that may include letters, numbers, and symbols.
 
 ```
-% ./nxn-gen-cli   
+% ./nxn-gen   
 Password Generated: j2GVfk.XmHPTpx=gP1U<
  Password Strength: 50
-% ./nxn-gen-cli
+% ./nxn-gen
 Password Generated: YDJ)FXTR*ZKRsV3PDTL2
  Password Strength: 50
-% ./nxn-gen-cli
+% ./nxn-gen
 Password Generated: (CxU)P)uOM#Sp!gn,3;e
  Password Strength: 50
 ```
@@ -45,13 +45,13 @@ Password Generated: (CxU)P)uOM#Sp!gn,3;e
 You can pass the `-s` flag if the password can only be comprised of letters and numbers (no symbols). This is a dumb requirement, but I've seen it enough to add the flag. 
 
 ```
-% ./nxn-gen-cli -s
+% ./nxn-gen -s
 Password Generated: i6Vw1b37Zbj58u9qzqdf
  Password Strength: 30
-% ./nxn-gen-cli -s
+% ./nxn-gen -s
 Password Generated: N3CqQQYJ72mQ9cKIQmqG
  Password Strength: 30
-% ./nxn-gen-cli -s
+% ./nxn-gen -s
 Password Generated: 129mgrmrltpLyfdsikim
  Password Strength: 30
 ```
@@ -59,13 +59,13 @@ Password Generated: 129mgrmrltpLyfdsikim
 Naturally, password strength suffers when we place restrictions on the alphabet. Setting small length restrictions has the same effect.
 
 ```
-% ./nxn-gen-cli -s -l=5
+% ./nxn-gen -s -l=5
 Password Generated: 6d16G
  Password Strength: 10
-% ./nxn-gen-cli -s -l=5
+% ./nxn-gen -s -l=5
 Password Generated: 976Br
  Password Strength: 10
-% ./nxn-gen-cli -s -l=5
+% ./nxn-gen -s -l=5
 Password Generated: 38X1o
  Password Strength: 10
 ```
@@ -73,7 +73,7 @@ Password Generated: 38X1o
 Here's how to generate 10 passwords of length 30, which can contain any letter, number, or symbol.
 
 ```
-./nxn-gen-cli -l=30 -q=10 
+./nxn-gen -l=30 -q=10 
 Password Generated: nl7sh*vbnlwjgchhrlelrhjdr{Qnrc
  Password Strength: 50
 Password Generated: M3w4-|UpsNZ81?5N_B79pG'4QfXS2R

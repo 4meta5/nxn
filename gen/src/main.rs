@@ -1,4 +1,4 @@
-use gen::{
+use nxn_gen::{
     score,
     Generator,
 };

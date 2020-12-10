@@ -3,7 +3,12 @@ name = "nxn-gen"
 version = "0.1.0"
 authors = ["4meta5 <asinghchrony@protonmail.com>"]
 edition = "2018"
-description = "password generation utils"
+description = "password generation tool"
+
+[[bin]]
+name = "nxn-gen"
+doc = false
 
 [dependencies]
 rand = "0.7.3"
+structopt = "0.3.21"
