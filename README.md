@@ -2,14 +2,14 @@
 
 password manager components
 
-- [x] password generator cli (`./gen/cli`)
+- [x] password generator cli (`./gen`)
 - [x] password authenticated local storage (`./store`)
 - [ ] store (encrypted) credentials
 - [ ] store (encrypted) files
 
 ## modules
 
-password generation cli (`./gen/cli`)
+password generation cli (`./gen`)
 
 ```
 % ./nxn-gen -h        
