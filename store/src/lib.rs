@@ -15,9 +15,11 @@ use err::{
     PasswordTooSimple,
 };
 use gen::score;
+use keystore::KeyStore;
 
 /// Password authenticated store
 pub struct Store {
+    pub key: KeyStore,
     _path: PathBuf,
     password: Option<SecretString>,
 }
@@ -26,6 +28,7 @@ impl Store {
     pub fn new<T: AsRef<Path>>(path: T) -> Self {
         Self {
             _path: path.as_ref().to_path_buf(),
+            key: KeyStore::new(),
             password: None,
         }
     }
