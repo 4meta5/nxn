@@ -7,7 +7,9 @@ use secrecy::{
     ExposeSecret,
     SecretString,
 };
+mod arr;
 mod err;
+mod key;
 use err::{
     IncorrectPassword,
     PasswordNotSet,
@@ -15,23 +17,28 @@ use err::{
     PasswordTooSimple,
 };
 use gen::score;
-use keystore::KeyStore;
+use key::KeyPair;
 
 /// Password authenticated store
 pub struct Store {
-    pub key: KeyStore,
-    _path: PathBuf,
+    locked: bool,
+    db: sled::Db,
+    key: KeyPair,
     password: Option<SecretString>,
 }
 
 impl Store {
     pub fn new<T: AsRef<Path>>(path: T) -> Self {
         Self {
-            _path: path.as_ref().to_path_buf(),
-            key: KeyStore::new(),
+            locked: false,
+            db: sled::open(path.as_ref().to_path_buf()).unwrap(),
+            key: KeyPair::new(),
             password: None,
         }
     }
+    pub fn unlocked(&self) -> bool {
+        !self.locked
+    } // TODO: lock(), unlock()
     pub fn set_password(&mut self, password: SecretString) -> Result<()> {
         if self.has_password() {
             Err(PasswordSet.into())

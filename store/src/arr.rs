@@ -1,3 +1,4 @@
+//! [SRC](https://github.com/sunshine-protocol/sunshine-core/blob/master/crypto/src/array.rs)
 use async_std::task;
 use generic_array::{
     ArrayLength,
@@ -25,7 +26,7 @@ use strobe_rs::{
 use subtle::ConstantTimeEq;
 use zeroize::Zeroize;
 
-/// Asynchronous Random Byte Generator
+/// Async Random Byte Generator
 async fn random<T: Default + AsMut<[u8]> + Send + 'static>() -> T {
     task::spawn_blocking(|| {
         let mut buf = T::default();
@@ -49,6 +50,10 @@ impl<T: ArrayLength<u8> + Debug + Default + Eq + Send + Sync + 'static> Size
 {
 }
 
+/// A wrapper around a generic array providing cryptographic functions.
+///
+/// Safe to use for secrets. It is zeroized on drop and has a "safe" `Debug` implementation
+/// and comparisons happen in constant time.
 #[derive(Clone, Default, Hash)]
 #[allow(clippy::derive_hash_xor_eq)]
 pub struct SafeArray<S: Size>(GenericArray<u8, S>);
@@ -99,9 +104,9 @@ impl<S: Size> Decode for SafeArray<S> {
     fn decode<R: Input>(
         value: &mut R,
     ) -> Result<Self, parity_scale_codec::Error> {
-        let mut me = Self::default();
-        value.read(me.as_mut())?;
-        Ok(me)
+        let mut ab = Self::default();
+        value.read(ab.as_mut())?;
+        Ok(ab)
     }
 }
 
@@ -118,9 +123,9 @@ impl<S: Size> SafeArray<S> {
         if bytes.len() != S::to_usize() {
             return Err(SizeMismatch)
         }
-        let mut me = Self::default();
-        me.copy_from_slice(bytes);
-        Ok(me)
+        let mut ab = Self::default();
+        ab.copy_from_slice(bytes);
+        Ok(ab)
     }
 
     pub fn from_mnemonic(
@@ -168,13 +173,6 @@ impl<S: Size> SafeArray<S> {
         s.prf(res.as_mut(), false);
         res
     }
-
-    // pub async fn encrypt<K: Size, N: Size, T: Size>(
-    //     &self,
-    //     key: &SafeArray<K>,
-    // ) -> CipherText<S, K, N, T> {
-    //     CipherText::encrypt(self, key).await
-    // }
 
     pub fn array(&self) -> &GenericArray<u8, S> {
         &self.0
