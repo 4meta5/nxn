@@ -12,6 +12,7 @@ async-std = {version = "1.7.0", features = ["unstable","attributes"]}
 bip39 = "1.0.0-rc1"
 gen = {package = "nxn-gen",path = "../gen"}
 generic-array = "0.14.4"
+keystore = {package = "owlchat-keystore",path="../../keystore/keystore"}
 parity-scale-codec = "1.3.5"
 rand = "0.7.3"
 secrecy = "0.7.0"
